@@ -3,47 +3,54 @@ Dropzone Extension for Yii 2
 
 This extension provides the [Dropzone](http://www.dropzonejs.com/) integration for the Yii2 framework.
 
+Information
+-----------
+
+This repository is fork from [DevGroup-ru/yii2-dropzone](https://github.com/DevGroup-ru/yii2-dropzone)
 
 Installation
 ------------
 
-This extension requires [Dropzone](https://github.com/enyo/dropzone)
-
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
-
-Either run
+Run composer 
 
 ```
-php composer.phar require --prefer-dist devgroup/yii2-dropzone "*"
+composer require --prefer-dist private-it/yii2-dropzone "*"
 ```
-
-or add
-
-```
-"devgroup/yii2-dropzone": "*"
-```
-
-to the require section of your composer.json.
-
 
 General Usage
 -------------
 
+Config file:
 ```php
-use devgroup\dropzone\DropZone;
-
-DropZone::widget(
-    [
-        'name' => 'file', // input name or 'model' and 'attribute'
-        'url' => '', // upload url
-        'storedFiles' => [], // stores files
-        'eventHandlers' => [], // dropzone event handlers
-        'sortable' => true, // sortable flag
-        'sortableOptions' => [], // sortable options
-        'htmlOptions' => [], // container html options
-        'options' => [], // dropzone js options
+...
+'bootstrap' => [
+    'dropZone' => [
+        'class' => \devgroup\dropzone\DropZoneBootstrap::className(),
+        'autoRegisterAssets' => true,
+        'autoRegisterController' => true,
     ]
-)
+],
+...
 ```
 
-you can also register `devgroup\dropzone\UploadAction` and `devgroup\dropzone\RemoveAction` actions in your controller
+
+
+View file:
+
+```php
+<?= \devgroup\dropzone\DropZone::widget([
+    'name' => 'file',
+    'options' => [
+        'addRemoveLinks' => true,
+        // translate options:
+        // 'dictRemoveFile' => '',
+        // 'dictRemoveFileConfirmation' => '',
+        // 'dictDefaultMessage' => '',
+    ],
+    'registerEventRemovedFile' => true,
+]) ?>
+```
+
+`addRemoveLinks` - flag for enable link "Remove file"
+
+`registerEventRemovedFile` - flag for attache default event for remove file from server 
