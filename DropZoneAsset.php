@@ -11,8 +11,7 @@ class DropZoneAsset extends AssetBundle
         YII_DEBUG ? 'dropzone.css' : 'min/dropzone.min.css',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
-        'yii\jui\JuiAsset',
+        'yii\web\JqueryAsset'
     ];
     public $js = [
         YII_DEBUG ? 'dropzone.js' : 'min/dropzone.min.js',
