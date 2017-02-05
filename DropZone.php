@@ -47,7 +47,7 @@ class DropZone extends Widget
             $this->view->registerJs('var files = ' . Json::encode($files));
             $this->view->registerJs('for (var i=0; i<files.length; i++) {
                 ' . $this->dropzoneName . '.emit("addedfile", files[i]);
-                ' . $this->dropzoneName . '.emit("thumbnail", files[i], files[i]["thumbnail"]);
+                if ("thumbnail" in files[i]) ' . $this->dropzoneName . '.emit("thumbnail", files[i], files[i]["thumbnail"]);
                 ' . $this->dropzoneName . '.emit("complete", files[i]);
             }');
         }
@@ -106,11 +106,16 @@ class DropZone extends Widget
         $this->createDropzone();
 
         if ($this->registerEventRemovedFile) {
+            $this->eventHandlers['complete'] = 'function(file){
+                if (file.xhr) {
+                    var info = JSON.parse(file.xhr.response);
+                    file.uploadName = info.filename;
+                }
+            }';
             $this->eventHandlers['removedfile'] = 'function(file){
-                var info = JSON.parse(file.xhr.response)
                 $.ajax({
                     url: "' . DropZoneComponent::getInstance()->removeUrl . '",
-                    data: { filename: info.filename},
+                    data: { filename: file.uploadName},
                     type: \'POST\',
                     success: function (data) { if (!data) alert("Error"); },
                     error: function (data) {alert(data.Message);}
