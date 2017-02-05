@@ -1,5 +1,5 @@
 {
-    "name": "devgroup/yii2-dropzone",
+    "name": "private-it/yii2-dropzone",
     "description": "Yii2 Dropzone widget",
     "type": "yii2-extension",
     "keywords": ["yii2", "dropzone", "upload"],
@@ -16,6 +16,11 @@
         {
             "name": "Pavel Fedotov",
             "email": "fps.06@mail.ru"
+        },
+        {
+            "name": "Igor Sapegin aka Rendol",
+            "email": "sapegin.in@gmail.ru",
+            "homepage": "http://sapegin.in/"
         }
     ],
     "minimum-stability": "dev",
