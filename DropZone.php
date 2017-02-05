@@ -7,7 +7,6 @@ use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
 
 class DropZone extends Widget
 {
@@ -17,6 +16,7 @@ class DropZone extends Widget
     public $name;
     public $options = [];
     public $eventHandlers = [];
+    public $registerEventRemovedFile = false;
     public $url;
     public $storedFiles = [];
     public $sortable = false;
@@ -78,7 +78,7 @@ class DropZone extends Widget
         }
 
         if (empty($this->url)) {
-            $this->url = Url::toRoute(['site/upload']);
+            $this->url = DropZoneComponent::getInstance()->uploadUrl;
         }
 
         $options = [
@@ -105,6 +105,18 @@ class DropZone extends Widget
 
         $this->createDropzone();
 
+        if ($this->registerEventRemovedFile) {
+            $this->eventHandlers['removedfile'] = 'function(file){
+                var info = JSON.parse(file.xhr.response)
+                $.ajax({
+                    url: "' . DropZoneComponent::getInstance()->removeUrl . '",
+                    data: { filename: info.filename},
+                    type: \'POST\',
+                    success: function (data) { if (!data) alert("Error"); },
+                    error: function (data) {alert(data.Message);}
+                })
+            }';
+        }
         foreach ($this->eventHandlers as $event => $handler) {
             $handler = new \yii\web\JsExpression($handler);
             $this->getView()->registerJs(
